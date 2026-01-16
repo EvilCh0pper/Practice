@@ -7,7 +7,7 @@ const processorBtn = document.getElementById('process-btn');
 const inputText = document.getElementById('user-input');
 const outputText = document.getElementById('output-text');
 const list = document.getElementById('item-list');
-const addToListBtn = document.getElementById('add-item');
+const searchAnime = document.getElementById('anime-search');
 
 const goatAnimeList = [
   "One Piece",             // The King of World-Building
@@ -22,6 +22,8 @@ const goatAnimeList = [
   "Death Note"             // The Ultimate Gateway
 ];
 
+var currentList = [];
+
 // 2. STATE VARIABLE
 let count = 0;
 
@@ -35,16 +37,36 @@ function updateDisplay() {
 }
 
 function updateOutput(){
-    outputText.innerText = inputText.value;
+    if (inputText.value.trim() === '') {
+        window.alert('You need to give me a text to echo :)')
+    } else if (inputText.value.length >= 20 ){
+        window.alert('The text length is too long')
+    }
+    else {
+        outputText.innerText = inputText.value;
+    }
+    
 }
 
 function addRandomAnime(){
-
     const dailyRecommendation = goatAnimeList[Math.floor(Math.random() * goatAnimeList.length)];
     const node = document.createElement("li");
     const textnode = document.createTextNode(dailyRecommendation);
     node.appendChild(textnode);
-    document.getElementById('item-list').appendChild(node);
+    list.appendChild(node);
+}
+
+function addToAnimeList(item){
+    //check if item is in the currentList and exist in goatAnimeList
+    //actually adding an item
+    const node = document.createElement("li");
+    const textnode = document.createTextNode(item);
+    node.appendChild(textnode);
+    list.appendChild(node);    
+}
+
+function clearAnimeList(){
+    list.innerHTML = "";
 }
 
 // 4. EVENT LISTENERS
@@ -67,6 +89,23 @@ processorBtn.addEventListener('click', () => {
     updateOutput();
 });
 
-addToListBtn.addEventListener('click', () => {
-    addRandomAnime();
+searchAnime.addEventListener('input', () => {
+    //addRandomAnime();
+    var matches = [];
+
+    clearAnimeList();
+    
+    for (let i = 0; i < goatAnimeList.length; i++) {
+        if (goatAnimeList[i].toLowerCase().includes(searchAnime.value.toLowerCase())) {
+            if (!matches.includes(goatAnimeList[i].toLowerCase()))(
+                matches.push(goatAnimeList[i])
+            );
+        }   
+    }
+    
+    //adds to the actual list
+    for (let i = 0; i < matches.length;  i++){
+        addToAnimeList(matches[i])
+    }
+
 });
