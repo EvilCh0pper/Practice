@@ -108,4 +108,10 @@ searchAnime.addEventListener('input', () => {
         addToAnimeList(matches[i])
     }
 
+    if(searchAnime.value === ""){
+    
+        clearAnimeList();
+    
+    }
+
 });
