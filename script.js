@@ -8,6 +8,12 @@ const inputText = document.getElementById('user-input');
 const outputText = document.getElementById('output-text');
 const list = document.getElementById('item-list');
 const searchAnime = document.getElementById('anime-search');
+const darkModeToggle = document.getElementById('theme-toggle')
+const savedTheme = localStorage.getItem('theme');
+
+if (savedTheme === 'dark') {
+    document.body.classList.add('dark-theme');
+}
 
 const goatAnimeList = [
   "One Piece",             // The King of World-Building
@@ -22,7 +28,8 @@ const goatAnimeList = [
   "Death Note"             // The Ultimate Gateway
 ];
 
-var currentList = [];
+const initialiseList = () => {for (let i = 0; i < goatAnimeList.length; i++ ) addToAnimeList(goatAnimeList[i])}
+initialiseList()
 
 // 2. STATE VARIABLE
 let count = 0;
@@ -38,9 +45,11 @@ function updateDisplay() {
 
 function updateOutput(){
     if (inputText.value.trim() === '') {
-        window.alert('You need to give me a text to echo :)')
+        //window.alert('You need to give me a text to echo :)')
+        outputText.innerText = "You need to give me a text!";
     } else if (inputText.value.length >= 20 ){
-        window.alert('The text length is too long')
+        //window.alert('The text length is too long')
+        outputText.innerText = "The text length is too long";
     }
     else {
         outputText.innerText = inputText.value;
@@ -67,6 +76,20 @@ function addToAnimeList(item){
 
 function clearAnimeList(){
     list.innerHTML = "";
+}
+
+function themeToggle() {
+    document.body.classList.toggle('dark-theme')
+
+    if (localStorage.getItem('theme') === null || localStorage.getItem('theme') === 'light') {
+        localStorage.setItem('theme', 'dark')
+        console.log(localStorage.getItem('theme'), "should be dark")
+
+    } else {
+        localStorage.setItem('theme', 'light')
+        console.log(localStorage.getItem('theme'), "should be light")
+
+    }
 }
 
 // 4. EVENT LISTENERS
@@ -97,9 +120,9 @@ searchAnime.addEventListener('input', () => {
     
     for (let i = 0; i < goatAnimeList.length; i++) {
         if (goatAnimeList[i].toLowerCase().includes(searchAnime.value.toLowerCase())) {
-            if (!matches.includes(goatAnimeList[i].toLowerCase()))(
+            if (!matches.includes(goatAnimeList[i])){
                 matches.push(goatAnimeList[i])
-            );
+            };
         }   
     }
     
@@ -108,10 +131,9 @@ searchAnime.addEventListener('input', () => {
         addToAnimeList(matches[i])
     }
 
-    if(searchAnime.value === ""){
-    
-        clearAnimeList();
-    
-    }
+});
 
+darkModeToggle.addEventListener('click', () => {
+    themeToggle();
+    
 });
